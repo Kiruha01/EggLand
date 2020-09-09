@@ -14,7 +14,7 @@ class MainActivity : AppCompatActivity() {
         val girdAdapter = TimersAdapter(listOfTimers, this)
         girdView.adapter = girdAdapter
         girdView.setOnItemClickListener { adapterView, view, pos, id ->
-            listOfTimers[pos].thatview = view
+            //listOfTimers[pos].thatview = view
             Toast.makeText(this, view.nameCard.text.toString(), Toast.LENGTH_SHORT).show()
             listOfTimers[pos].startTimer(pos)
         }
