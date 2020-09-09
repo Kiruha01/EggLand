@@ -9,7 +9,7 @@ import java.util.*
 
 class AlarmUtils {
     companion object {
-        fun setAlarm(context: Context, id: Int, nowSeconds: Long, secondsRemaining: Long): Long{
+        fun setAlarm(id: Int, context: Context, nowSeconds: Long, secondsRemaining: Long): Long{
             val wakeUpTime = (nowSeconds + secondsRemaining)*1000
             val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
             val intent = Intent(context, TimerReceiver::class.java)
@@ -20,7 +20,7 @@ class AlarmUtils {
             return wakeUpTime
         }
 
-        fun removeAlarm(context: Context, id: Int){
+        fun removeAlarm(id: Int, context: Context){
             val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
             val intent = Intent(context, TimerReceiver::class.java)
                 .putExtra("id", id)

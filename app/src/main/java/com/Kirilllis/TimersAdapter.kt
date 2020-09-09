@@ -20,6 +20,7 @@ class TimersAdapter(val timers: Array<TimerTile>, val context: Context): BaseAda
             view?.findViewById<TextView>(R.id.timeCard)?.setText("${timers[position].lengthInSeconds/60}:${timers[position].lengthInSeconds % 60}")
             view?.findViewById<ImageView>(R.id.icon)?.setImageResource(timers[position].idPicture)
         }
+        MainActivity.listOfViewws.add(position, view!!)
         return view!!;
     }
 

@@ -10,9 +10,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <receiver
-            android:name=".receivers.TimerReceiver"
+            android:name=".receivers.NotifyReceiver"
             android:enabled="true"
             android:exported="false"></receiver>
+        <receiver
+            android:name=".receivers.TimerReceiver"
+            android:enabled="true"
+            android:exported="false" />
 
         <activity android:name=".MainActivity">
             <intent-filter>
