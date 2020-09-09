@@ -10,7 +10,7 @@ class PrefUtils {
             return 1
         }
 
-        private const val PREVIOUS_TIMER_LENGTH_SECONDS_ID = "com.gam3rs.timertest2.previous_timer_length"
+        private const val PREVIOUS_TIMER_LENGTH_SECONDS_ID = "com.Kirilllis.EggLand.previous_timer_length"
 
         fun getPreviousTimerLength(id : Int, context: Context): Long{
             val preferences = PreferenceManager.getDefaultSharedPreferences(context)
@@ -23,7 +23,7 @@ class PrefUtils {
             editor.apply()
         }
 
-        val TIMER_STATE_ID = "com.gam3rs.timertest2.timer_state"
+        private const val TIMER_STATE_ID = "com.Kirilllis.EggLand.timer_state"
         fun getTimerState(id : Int, context: Context) : TimerTile.TimerState{
             val preferences = PreferenceManager.getDefaultSharedPreferences(context)
             val ordinal =  preferences.getInt(TIMER_STATE_ID + id.toString(), 0)
@@ -36,7 +36,7 @@ class PrefUtils {
             editor.putInt(TIMER_STATE_ID + id.toString(), ordinal)
             editor.apply()
         }
-        private const val SECONDS_REMAINING = "com.gam3rs.timertest2.seconds_remaining"
+        private const val SECONDS_REMAINING = "com.Kirilllis.EggLand.seconds_remaining"
         fun getSecondsRemaining(id : Int, context: Context): Long{
             val preferences = PreferenceManager.getDefaultSharedPreferences(context)
             return preferences.getLong(SECONDS_REMAINING + id.toString(), 0)
@@ -48,7 +48,7 @@ class PrefUtils {
             editor.apply()
         }
 
-        private const val ALARM_SET_TIME_ID = "com.gam3rs.timertest2.background_timer"
+        private const val ALARM_SET_TIME_ID = "com.Kirilllis.EggLand.background_timer"
 
         fun getAlarmSetTime(id : Int, context: Context): Long{
             val preferences = PreferenceManager.getDefaultSharedPreferences(context)
