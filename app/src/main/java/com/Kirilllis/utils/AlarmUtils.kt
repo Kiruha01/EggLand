@@ -6,7 +6,9 @@ import android.content.Context
 import android.content.Intent
 import com.Kirilllis.receivers.TimerReceiver
 import java.util.*
-
+/*
+* Утилиты для запуска фонового таймера
+* */
 class AlarmUtils {
     companion object {
         fun setAlarm(id: Int, context: Context, nowSeconds: Long, secondsRemaining: Long): Long{
@@ -29,6 +31,7 @@ class AlarmUtils {
             PrefUtils.setAlarmSetTime(id, 0, context)
         }
 
+        // Текущее время
         val nowSeconds: Long
             get() = Calendar.getInstance().timeInMillis / 1000
 

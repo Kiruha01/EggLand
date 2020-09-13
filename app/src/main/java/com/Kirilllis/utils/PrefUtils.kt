@@ -4,6 +4,11 @@ import android.content.Context
 import android.preference.PreferenceManager
 import com.Kirilllis.TimerTile
 
+
+/*
+* Утилиты для сохранений состояния таймеров при выходе из приложения
+* Сохраняет оставшееся время, состояние, время запуска фонового таймера
+* */
 class PrefUtils {
     companion object{
         fun getTimerLength(context: Context): Int{

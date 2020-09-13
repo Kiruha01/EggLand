@@ -8,6 +8,10 @@ import com.Kirilllis.utils.AlarmUtils
 import com.Kirilllis.utils.NotificationUtils
 import com.Kirilllis.utils.PrefUtils
 
+/*
+* Приёмник событий с кнопок уведомлений
+*/
+
 class NotifyReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
@@ -16,7 +20,7 @@ class NotifyReceiver : BroadcastReceiver() {
             NotificationUtils.ACTION_STOP -> {
                 AlarmUtils.removeAlarm(id, context)
                 PrefUtils.setTimerState(id, TimerTile.TimerState.Stopped, context)
-                NotificationUtils.hideNot(context)
+                NotificationUtils.hideNotification(context)
             }
             NotificationUtils.ACTION_PAUSE-> {
                 var secondsRemaining = PrefUtils.getSecondsRemaining(id, context)

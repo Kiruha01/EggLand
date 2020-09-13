@@ -15,6 +15,9 @@ import com.Kirilllis.R
 import com.Kirilllis.receivers.NotifyReceiver
 import java.text.SimpleDateFormat
 import java.util.*
+/*
+* Класс для работы с уведомлениями
+* */
 
 class NotificationUtils {
     companion object{
@@ -27,12 +30,13 @@ class NotificationUtils {
         const val ACTION_STOP = "stop"
         const val ACTION_PAUSE = "pause"
 
+        // Время вышло
         fun showTimerExpired(id: Int, context: Context){
             val startIntent = Intent(context, NotifyReceiver::class.java)
             startIntent.action = ACTION_START
             startIntent.putExtra("id", id)
             val startPendingIntent = PendingIntent.getBroadcast(context, 0, startIntent, PendingIntent.FLAG_UPDATE_CURRENT)
-            val nBuilder = getNotiBuilder(context, CHANNEL_ID_TIMER, true)
+            val nBuilder = getNotificationBuilder(context, CHANNEL_ID_TIMER, true)
             nBuilder.setContentTitle(MainActivity.listOfTimers[id].name)
                 .setContentText("Start Again?")
                 // TODO.setSmallIcon(R.drawable.ic_icon)
@@ -43,12 +47,13 @@ class NotificationUtils {
             nManager.notify(TIMER_ID, nBuilder.build())
         }
 
+        // На паузе
         fun showTimerPaused(id: Int, context: Context){
             val startIntent = Intent(context, NotifyReceiver::class.java)
             startIntent.action = ACTION_RESUME
             startIntent.putExtra("id", id)
             val startPendingIntent = PendingIntent.getBroadcast(context, 0, startIntent, PendingIntent.FLAG_UPDATE_CURRENT)
-            val nBuilder = getNotiBuilder(context, CHANNEL_ID_TIMER, true)
+            val nBuilder = getNotificationBuilder(context, CHANNEL_ID_TIMER, true)
             nBuilder.setContentTitle(MainActivity.listOfTimers[id].name)
                 .setContentText("Resume?")
                 // TODO .setSmallIcon(R.drawable.ic_icon)
@@ -60,6 +65,7 @@ class NotificationUtils {
             nManager.notify(TIMER_ID, nBuilder.build())
         }
 
+        // Во время работы
         fun showTimerRunning(id: Int, context: Context, wakeuptime: Long){
             val pauseIntent = Intent(context, NotifyReceiver::class.java)
             pauseIntent.action = ACTION_PAUSE
@@ -74,7 +80,7 @@ class NotificationUtils {
             val df = SimpleDateFormat.getTimeInstance(SimpleDateFormat.SHORT)
 
 
-            val nBuilder = getNotiBuilder(context, CHANNEL_ID_TIMER, true)
+            val nBuilder = getNotificationBuilder(context, CHANNEL_ID_TIMER, true)
             nBuilder.setContentTitle(MainActivity.listOfTimers[id].name)
                 .setContentText("End: ${df.format(Date(wakeuptime))}")
                 .setContentIntent(getPendingIntentWithStack(context, MainActivity::class.java))
@@ -87,7 +93,7 @@ class NotificationUtils {
             nManager.notify(TIMER_ID, nBuilder.build())
         }
 
-        private fun getNotiBuilder(
+        private fun getNotificationBuilder(
             context: Context,
             channelId: String,
             playSound: Boolean
@@ -121,7 +127,7 @@ class NotificationUtils {
                 this.createNotificationChannel(nChannel)
             }
         }
-        fun hideNot(context: Context){
+        fun hideNotification(context: Context){
             val nManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             nManager.cancel(TIMER_ID)
         }

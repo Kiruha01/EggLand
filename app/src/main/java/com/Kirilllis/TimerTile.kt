@@ -5,7 +5,19 @@ import android.media.RingtoneManager
 import android.os.CountDownTimer
 import com.Kirilllis.utils.PrefUtils
 import kotlinx.android.synthetic.main.timer_item.view.*
-
+/*
+* Класс, который хранит все данные о каждом таймере.
+* params:
+*   id - идентификатор таймера для доступа к остальным возможностям
+*   name - имя таймера
+*   idPicture - идентификатор иконки таймера
+*   context - контекст приложения
+*
+* state - состояние таймера
+* secondsRemaining - оставшееся количество секунд
+* timer - сам таймер, который отсчитывает секунды
+*
+* */
 
 class TimerTile(val id: Int, val name: String, val lengthInSeconds: Long, val idPicture: Int, val context: Context) {
     enum class TimerState{
