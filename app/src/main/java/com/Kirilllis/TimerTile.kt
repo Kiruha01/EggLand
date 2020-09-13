@@ -27,19 +27,21 @@ class TimerTile(val id: Int, val name: String, val lengthInSeconds: Long, val id
     private var secondsRemaining: Long = lengthInSeconds
     private lateinit var timer: CountDownTimer
 
-    fun startTimer(){
-        fun finish(){
-            val ringtoneUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-            val ringtoneSound = RingtoneManager.getRingtone(context, ringtoneUri)
+    fun finish(){
+        val ringtoneUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        val ringtoneSound = RingtoneManager.getRingtone(context, ringtoneUri)
 
-            ringtoneSound.play();
-        }
-        if (state != TimerState.Running) {
+        ringtoneSound.play();
+    }
+
+    fun startTimer(){
+
             state = TimerState.Running
             timer = object : CountDownTimer(secondsRemaining * 1000, 1000) {
                 override fun onFinish() {
                     finish()
-                    secondsRemaining = 0
+                    secondsRemaining = lengthInSeconds
+                    state = TimerState.Stopped
                     PrefUtils.setTimerState(id, TimerState.Stopped, context)
                 }
 
@@ -48,30 +50,28 @@ class TimerTile(val id: Int, val name: String, val lengthInSeconds: Long, val id
 
                 }
             }.start()
-        }
+
+    }
+
+    fun stopTimer(){
+        timer.cancel()
     }
 
     fun getRemainingSeconds(): Long{
         return secondsRemaining
     }
 
-    fun pauseTimer(){
-
-    }
-
-    fun stopTimer(){
-
-    }
-
-    fun resumeTimer(){
-
-    }
-
     fun saveData(){
-
+        PrefUtils.setSecondsRemaining(id, secondsRemaining, context)
+        PrefUtils.setTimerState(id, state, context)
     }
 
     fun loadData(){
+        //PrefUtils.setTimerState(id, TimerState.Stopped, context)
+        state = PrefUtils.getTimerState(id, context)
+        secondsRemaining = if (state == TimerState.Running || state == TimerState.Paused) PrefUtils.getSecondsRemaining(id, context)
+        else lengthInSeconds
+
 
     }
 }

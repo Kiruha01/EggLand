@@ -28,10 +28,12 @@ class MainActivity : AppCompatActivity() {
         val girdAdapter = TimersAdapter(listOfTimers, this)
         girdView.adapter = girdAdapter
         girdView.setOnItemClickListener { adapterView, view, pos, id ->
-            listOfTimers[pos].startTimer()
-            //listOfTimers[pos].thatview = view
-            Toast.makeText(this, view.nameCard.text.toString(), Toast.LENGTH_SHORT).show()
-            listIDOfRunningTimers.add(pos)
+            if (listOfTimers[pos].state != TimerTile.TimerState.Running) {
+                listOfTimers[pos].startTimer()
+                //listOfTimers[pos].thatview = view
+                Toast.makeText(this, view.nameCard.text.toString(), Toast.LENGTH_SHORT).show()
+                listIDOfRunningTimers.add(pos)
+            }
         }
 
 
@@ -46,7 +48,25 @@ class MainActivity : AppCompatActivity() {
             },
             0, 1000
         )
+    }
 
+    override fun onPause() {
+        super.onPause()
+        for (idTimer in listIDOfRunningTimers){
+            listOfTimers[idTimer].saveData()
+            listOfTimers[idTimer].stopTimer()
+        }
+    }
 
+    override fun onResume() {
+        super.onResume()
+        for (idTimer in listOfTimers.indices){
+            listOfTimers[idTimer].loadData()
+            if (listOfTimers[idTimer].state == TimerTile.TimerState.Running) {
+                listOfTimers[idTimer].startTimer()
+                listIDOfRunningTimers.add(idTimer)
+            }
+
+        }
     }
 }

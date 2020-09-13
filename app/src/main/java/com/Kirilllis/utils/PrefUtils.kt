@@ -19,7 +19,7 @@ class PrefUtils {
 
         fun getPreviousTimerLength(id : Int, context: Context): Long{
             val preferences = PreferenceManager.getDefaultSharedPreferences(context)
-            return preferences.getLong(PREVIOUS_TIMER_LENGTH_SECONDS_ID + id.toString(), 0)
+            return preferences.getLong(PREVIOUS_TIMER_LENGTH_SECONDS_ID + id.toString(), 0L)
         }
 
         fun setPreviousTimerLength(id : Int, seconds: Long, context: Context) {
@@ -44,7 +44,7 @@ class PrefUtils {
         private const val SECONDS_REMAINING = "com.Kirilllis.EggLand.seconds_remaining"
         fun getSecondsRemaining(id : Int, context: Context): Long{
             val preferences = PreferenceManager.getDefaultSharedPreferences(context)
-            return preferences.getLong(SECONDS_REMAINING + id.toString(), 0)
+            return preferences.getLong(SECONDS_REMAINING + id.toString(), 0L)
         }
 
         fun setSecondsRemaining(id : Int, seconds: Long, context: Context) {
@@ -57,7 +57,7 @@ class PrefUtils {
 
         fun getAlarmSetTime(id : Int, context: Context): Long{
             val preferences = PreferenceManager.getDefaultSharedPreferences(context)
-            return preferences.getLong(ALARM_SET_TIME_ID + id.toString(), 0)
+            return preferences.getLong(ALARM_SET_TIME_ID + id.toString(), 0L)
         }
 
         fun setAlarmSetTime(id : Int, time:Long, context: Context){
