@@ -36,8 +36,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-
-
         MainTimer.scheduleAtFixedRate(
             object : TimerTask() {
                 override fun run() {
@@ -53,8 +51,9 @@ class MainActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         for (idTimer in listIDOfRunningTimers){
-            listOfTimers[idTimer].saveData()
             listOfTimers[idTimer].stopTimer()
+            listOfTimers[idTimer].saveData()
+            listOfTimers[idTimer].startBackgroundAlarm()
         }
     }
 
@@ -62,11 +61,11 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
         for (idTimer in listOfTimers.indices){
             listOfTimers[idTimer].loadData()
+            listOfTimers[idTimer].comeBackFromBackground()
             if (listOfTimers[idTimer].state == TimerTile.TimerState.Running) {
                 listOfTimers[idTimer].startTimer()
                 listIDOfRunningTimers.add(idTimer)
             }
-
         }
     }
 }

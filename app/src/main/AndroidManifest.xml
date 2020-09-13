@@ -14,7 +14,7 @@
             android:enabled="true"
             android:exported="false"></receiver>
         <receiver
-            android:name=".receivers.TimerReceiver"
+            android:name=".receivers.TimerAlarmReceiver"
             android:enabled="true"
             android:exported="false" />
 

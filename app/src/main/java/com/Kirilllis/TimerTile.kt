@@ -3,6 +3,7 @@ package com.Kirilllis
 import android.content.Context
 import android.media.RingtoneManager
 import android.os.CountDownTimer
+import com.Kirilllis.utils.AlarmUtils
 import com.Kirilllis.utils.PrefUtils
 import kotlinx.android.synthetic.main.timer_item.view.*
 /*
@@ -71,7 +72,18 @@ class TimerTile(val id: Int, val name: String, val lengthInSeconds: Long, val id
         state = PrefUtils.getTimerState(id, context)
         secondsRemaining = if (state == TimerState.Running || state == TimerState.Paused) PrefUtils.getSecondsRemaining(id, context)
         else lengthInSeconds
+    }
 
+    fun startBackgroundAlarm(){
+        val wakeUpTime = AlarmUtils.setAlarm(id, context, AlarmUtils.nowSeconds, secondsRemaining)
+        PrefUtils.setAlarmSetTime(id, AlarmUtils.nowSeconds, context)
+    }
 
+    fun comeBackFromBackground(){
+        val alarmSetTime = PrefUtils.getAlarmSetTime(id, context)
+        if (alarmSetTime > 0){
+            secondsRemaining -= AlarmUtils.nowSeconds - alarmSetTime
+        }
+        AlarmUtils.removeAlarm(id, context)
     }
 }
