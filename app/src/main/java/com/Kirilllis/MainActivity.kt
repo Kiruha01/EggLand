@@ -4,9 +4,14 @@ import android.content.Context
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.Kirilllis.utils.NotificationUtils
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.timer_item.view.*
 import java.util.*
+
+/*
+TODO: что показывать по завершению будильника?
+ */
 
 class MainActivity : AppCompatActivity() {
     companion object{
@@ -15,7 +20,11 @@ class MainActivity : AppCompatActivity() {
         lateinit var listOfTimers: Array<TimerTile>
         val listIDOfRunningTimers = arrayListOf<Int>()
         fun createLists(){
-            listOfTimers = arrayOf(TimerTile(0, "Пельмяшки", 10, R.drawable.teams, context), TimerTile(1, "Пельмяши", 59, R.drawable.teams, context), TimerTile(2, "ГРеча", 75, R.drawable.hitman, context))
+            listOfTimers = arrayOf(
+                TimerTile(0, "Пельмяшки", 10, R.drawable.teams, context),
+                TimerTile(1, "Пельмяши", 59, R.drawable.teams, context),
+                TimerTile(2, "ГРеча", 75, R.drawable.hitman, context)
+            )
         }
     }
 
@@ -54,6 +63,7 @@ class MainActivity : AppCompatActivity() {
             listOfTimers[idTimer].stopTimer()
             listOfTimers[idTimer].saveData()
             listOfTimers[idTimer].startBackgroundAlarm()
+            NotificationUtils.showNearestNotification(listOfTimers, this)
         }
     }
 
@@ -67,5 +77,6 @@ class MainActivity : AppCompatActivity() {
                 listIDOfRunningTimers.add(idTimer)
             }
         }
+        NotificationUtils.hideNotifications(2, context)
     }
 }

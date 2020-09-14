@@ -20,7 +20,7 @@ class NotifyReceiver : BroadcastReceiver() {
             NotificationUtils.ACTION_STOP -> {
                 AlarmUtils.removeAlarm(id, context)
                 PrefUtils.setTimerState(id, TimerTile.TimerState.Stopped, context)
-                NotificationUtils.hideNotification(context)
+                NotificationUtils.hideNotifications(id, context)
             }
             NotificationUtils.ACTION_PAUSE-> {
                 var secondsRemaining = PrefUtils.getSecondsRemaining(id, context)

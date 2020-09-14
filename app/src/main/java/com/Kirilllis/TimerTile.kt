@@ -4,6 +4,7 @@ import android.content.Context
 import android.media.RingtoneManager
 import android.os.CountDownTimer
 import com.Kirilllis.utils.AlarmUtils
+import com.Kirilllis.utils.NotificationUtils
 import com.Kirilllis.utils.PrefUtils
 import kotlinx.android.synthetic.main.timer_item.view.*
 /*
@@ -36,7 +37,6 @@ class TimerTile(val id: Int, val name: String, val lengthInSeconds: Long, val id
     }
 
     fun startTimer(){
-
             state = TimerState.Running
             timer = object : CountDownTimer(secondsRemaining * 1000, 1000) {
                 override fun onFinish() {
@@ -48,10 +48,8 @@ class TimerTile(val id: Int, val name: String, val lengthInSeconds: Long, val id
 
                 override fun onTick(p0: Long) {
                     secondsRemaining = p0 / 1000
-
                 }
             }.start()
-
     }
 
     fun stopTimer(){
@@ -80,10 +78,12 @@ class TimerTile(val id: Int, val name: String, val lengthInSeconds: Long, val id
     }
 
     fun comeBackFromBackground(){
-        val alarmSetTime = PrefUtils.getAlarmSetTime(id, context)
-        if (alarmSetTime > 0){
-            secondsRemaining -= AlarmUtils.nowSeconds - alarmSetTime
+        if (state == TimerState.Running) {
+            val alarmSetTime = PrefUtils.getAlarmSetTime(id, context)
+            if (alarmSetTime > 0) {
+                secondsRemaining -= AlarmUtils.nowSeconds - alarmSetTime
+            }
+            AlarmUtils.removeAlarm(id, context)
         }
-        AlarmUtils.removeAlarm(id, context)
     }
 }

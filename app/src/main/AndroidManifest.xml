@@ -12,7 +12,14 @@
         <receiver
             android:name=".receivers.NotifyReceiver"
             android:enabled="true"
-            android:exported="false"></receiver>
+            android:exported="false">
+            <intent-filter>
+                <action android:name="start" />
+                <action android:name="resume" />
+                <action android:name="stop" />
+                <action android:name="pause" />
+            </intent-filter>
+        </receiver>
         <receiver
             android:name=".receivers.TimerAlarmReceiver"
             android:enabled="true"
