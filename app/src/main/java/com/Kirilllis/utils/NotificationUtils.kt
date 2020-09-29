@@ -9,6 +9,7 @@ import android.content.Intent
 import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Build
+import android.util.Log
 import android.widget.ListAdapter
 import androidx.core.app.NotificationCompat
 import com.Kirilllis.MainActivity
@@ -97,6 +98,7 @@ class NotificationUtils {
             val nManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             nManager.createNotificationChannel(true, CHANNEL_ID_TIMER, CHANNEL_NAME_TIMER)
             nManager.notify(id, nBuilder.build())
+            Log.d("DEBUG", "show $id notif")
         }
 
         private fun getNotificationBuilder(context: Context, channelId: String, playSound: Boolean): NotificationCompat.Builder {
@@ -150,6 +152,7 @@ class NotificationUtils {
         }
 
         fun showNearestNotification(timers: Array<TimerTile>, context: Context){
+            Log.d("DEBUG", "start method of notif")
 //            var idMinSeconds = findNearestTimerWithState(timers, TimerTile.TimerState.Running)
 //            if (idMinSeconds == -1)
 //                idMinSeconds = findNearestTimerWithState(timers, TimerTile.TimerState.Paused)

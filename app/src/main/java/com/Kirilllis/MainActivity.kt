@@ -2,6 +2,7 @@ package com.Kirilllis
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.Kirilllis.utils.NotificationUtils
@@ -18,11 +19,10 @@ class MainActivity : AppCompatActivity() {
         lateinit var context: Context
         const val countOfTimers = 3
         lateinit var listOfTimers: Array<TimerTile>
-        val listIDOfRunningTimers = arrayListOf<Int>()
         fun createLists(){
             listOfTimers = arrayOf(
                 TimerTile(0, "Пельмяшки", 10, R.drawable.teams, context),
-                TimerTile(1, "Пельмяши", 59, R.drawable.teams, context),
+                TimerTile(1, "Яйца", 59, R.drawable.teams, context),
                 TimerTile(2, "ГРеча", 75, R.drawable.hitman, context)
             )
         }
@@ -39,9 +39,7 @@ class MainActivity : AppCompatActivity() {
         girdView.setOnItemClickListener { adapterView, view, pos, id ->
             if (listOfTimers[pos].state != TimerTile.TimerState.Running) {
                 listOfTimers[pos].startTimer()
-                //listOfTimers[pos].thatview = view
                 Toast.makeText(this, view.nameCard.text.toString(), Toast.LENGTH_SHORT).show()
-                listIDOfRunningTimers.add(pos)
             }
         }
 
@@ -59,12 +57,28 @@ class MainActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        for (idTimer in listIDOfRunningTimers){
-            listOfTimers[idTimer].stopTimer()
-            listOfTimers[idTimer].saveData()
-            listOfTimers[idTimer].startBackgroundAlarm()
-            NotificationUtils.showNearestNotification(listOfTimers, this)
+        try {
+        Log.i("DEBUG", "onPause ++++++")
+        for (idTimer in listOfTimers){
+            if (idTimer.state == TimerTile.TimerState.Running) {
+                listOfTimers[idTimer.id].stopTimer()
+                listOfTimers[idTimer.id].saveData()
+                listOfTimers[idTimer.id].startBackgroundAlarm()
+            }
         }
+
+            Log.i("DEBUG", "onPause -----")
+        }
+        catch (t: Throwable){
+            Log.i("DEBUG", "onPausebnhfj -----")
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.i("DEBUG", "start onStop")
+        NotificationUtils.showNearestNotification(listOfTimers, this)
+        Log.i("DEBUG", "on Stop")
     }
 
     override fun onResume() {
@@ -74,9 +88,9 @@ class MainActivity : AppCompatActivity() {
             listOfTimers[idTimer].comeBackFromBackground()
             if (listOfTimers[idTimer].state == TimerTile.TimerState.Running) {
                 listOfTimers[idTimer].startTimer()
-                listIDOfRunningTimers.add(idTimer)
             }
         }
+        Log.d("DEBUG", "onResume, all loaded")
         NotificationUtils.hideNotifications(2, context)
     }
 }

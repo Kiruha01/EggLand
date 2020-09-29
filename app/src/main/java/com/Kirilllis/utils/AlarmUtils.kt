@@ -16,7 +16,7 @@ class AlarmUtils {
             val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
             val intent = Intent(context, TimerAlarmReceiver::class.java)
                 .putExtra("id", id)
-            val pendingIntent = PendingIntent.getBroadcast(context, id, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+            val pendingIntent = PendingIntent.getBroadcast(context, id, intent, 0)
             alarmManager.setExact(AlarmManager.RTC_WAKEUP, wakeUpTime, pendingIntent)
             PrefUtils.setAlarmSetTime(id, nowSeconds, context)
             return wakeUpTime
