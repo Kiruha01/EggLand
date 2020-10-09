@@ -1,10 +1,13 @@
 package com.Kirilllis
 
 import android.content.Context
+import android.content.res.TypedArray
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.Kirilllis.utils.AlarmUtils
 import com.Kirilllis.utils.NotificationUtils
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.timer_item.view.*
@@ -20,11 +23,11 @@ class MainActivity : AppCompatActivity() {
         const val countOfTimers = 3
         lateinit var listOfTimers: Array<TimerTile>
         fun createLists(){
-            listOfTimers = arrayOf(
-                TimerTile(0, "Пельмяшки", 10, R.drawable.teams, context),
-                TimerTile(1, "Яйца", 59, R.drawable.teams, context),
-                TimerTile(2, "ГРеча", 75, R.drawable.hitman, context)
-            )
+            val tArray = context.resources.obtainTypedArray(R.array.images)
+            listOfTimers = Array<TimerTile>(context.resources.getStringArray(R.array.names).size){
+                TimerTile(it, context.resources.getStringArray(R.array.names)[it], context.resources.getIntArray(R.array.time)[it].toLong(),  tArray.getResourceId(it, R.drawable.ooops), context)
+            }
+            tArray.recycle()
         }
     }
 
@@ -42,6 +45,8 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this, view.nameCard.text.toString(), Toast.LENGTH_SHORT).show()
             }
         }
+
+        //Log.i("DEBUG", Build.VERSION_CODES.O_MR1.toString())
 
         MainTimer.scheduleAtFixedRate(
             object : TimerTask() {

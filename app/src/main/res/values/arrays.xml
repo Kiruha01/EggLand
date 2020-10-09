@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="names">
+        <item>Пельмень</item>
+        <item>ФОльга</item>
+        <item>Айайай</item>
+    </string-array>
+    <integer-array name="time">
+        <item>10</item>
+        <item>20</item>
+        <item>90</item>
+    </integer-array>
+    <array name="images">
+        <item>@drawable/ooops</item>
+        <item>@drawable/teams</item>
+        <item>@drawable/hitman</item>
+    </array>
+</resources>

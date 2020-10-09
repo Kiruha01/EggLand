@@ -1,7 +1,10 @@
 package com.Kirilllis
 
+import android.content.ContentResolver
 import android.content.Context
+import android.content.Intent
 import android.media.RingtoneManager
+import android.net.Uri
 import android.os.CountDownTimer
 import android.util.Log
 import com.Kirilllis.utils.AlarmUtils
@@ -31,9 +34,11 @@ class TimerTile(val id: Int, val name: String, val lengthInSeconds: Long, val id
     private lateinit var timer: CountDownTimer
 
     fun finish(){
-        val ringtoneUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        //val notificationSound: Uri = Uri.parse(ContentResolver. SCHEME_ANDROID_RESOURCE + "://" + context.packageName + "/" + R.raw.tap_sms )
+        val ringtoneUri = Uri.parse(ContentResolver. SCHEME_ANDROID_RESOURCE + "://" + context.packageName + "/" + R.raw.tap_sms )
         val ringtoneSound = RingtoneManager.getRingtone(context, ringtoneUri)
-
+        val int = Intent(context, TimeIsUp::class.java)
+        context.startActivity(int)
         ringtoneSound.play();
     }
 

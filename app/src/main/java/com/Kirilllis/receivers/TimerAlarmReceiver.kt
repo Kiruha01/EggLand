@@ -4,6 +4,8 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.util.Log
+import androidx.core.content.ContextCompat.startActivity
+import com.Kirilllis.TimeIsUp
 import com.Kirilllis.TimerTile
 import com.Kirilllis.utils.AlarmUtils
 import com.Kirilllis.utils.NotificationUtils
@@ -17,5 +19,8 @@ class TimerAlarmReceiver : BroadcastReceiver() {
         NotificationUtils.showTimerExpired(intent.getIntExtra("id", 0), context)
         PrefUtils.setTimerState(intent.getIntExtra("id", 0), TimerTile.TimerState.Stopped, context)
         AlarmUtils.removeAlarm(intent.getIntExtra("id", 0) , context)
+        val int = Intent(context, TimeIsUp::class.java)
+        int.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        context.startActivity(int)
     }
 }
