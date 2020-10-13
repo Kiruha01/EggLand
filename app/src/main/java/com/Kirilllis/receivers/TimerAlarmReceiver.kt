@@ -20,6 +20,7 @@ class TimerAlarmReceiver : BroadcastReceiver() {
         PrefUtils.setTimerState(intent.getIntExtra("id", 0), TimerTile.TimerState.Stopped, context)
         AlarmUtils.removeAlarm(intent.getIntExtra("id", 0) , context)
         val int = Intent(context, TimeIsUp::class.java)
+            .putExtra("id", intent.getIntExtra("id", 0))
         int.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         context.startActivity(int)
     }

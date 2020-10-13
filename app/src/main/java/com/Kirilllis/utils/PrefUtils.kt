@@ -2,6 +2,8 @@ package com.Kirilllis.utils
 
 import android.content.Context
 import android.preference.PreferenceManager
+import com.Kirilllis.MainActivity
+import com.Kirilllis.R
 import com.Kirilllis.TimerTile
 
 
@@ -11,8 +13,8 @@ import com.Kirilllis.TimerTile
 * */
 class PrefUtils {
     companion object{
-        fun getTimerLength(context: Context): Int{
-            return 1
+        fun getTimerLength(id: Int, context: Context): Long{
+            return MainActivity.context.resources.getIntArray(R.array.time)[id].toLong()
         }
 
         private const val PREVIOUS_TIMER_LENGTH_SECONDS_ID = "com.Kirilllis.EggLand.previous_timer_length"

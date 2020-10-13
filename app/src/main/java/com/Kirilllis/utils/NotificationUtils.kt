@@ -28,8 +28,7 @@ import java.util.*
 class NotificationUtils {
     companion object{
         private const val CHANNEL_ID_TIMER = "menu_timer"
-        private const val CHANNEL_NAME_TIMER = "Ебаная Хуйнюшка"
-        private const val TIMER_ID = 0
+        private const val CHANNEL_NAME_TIMER = "EggLand"
 
         const val ACTION_START = "start"
         const val ACTION_RESUME = "resume"
@@ -42,14 +41,14 @@ class NotificationUtils {
             startIntent.action = ACTION_START
             startIntent.putExtra("id", id)
             val startPendingIntent = PendingIntent.getBroadcast(context, id, startIntent, PendingIntent.FLAG_UPDATE_CURRENT)
-            val nBuilder = getNotificationBuilder(context, CHANNEL_ID_TIMER, true)
+            val nBuilder = getNotificationBuilder(context, CHANNEL_ID_TIMER+"exp", true)
             nBuilder.setContentTitle(context.resources.getStringArray(R.array.names)[id])
                 .setContentText("Start Again?")
                 .setSmallIcon(R.drawable.ic_timer_finish)
                 .setContentIntent(getPendingIntentWithStack(context, MainActivity::class.java))
                 .addAction(R.drawable.ic_play_arrow, "Start", startPendingIntent)
             val nManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            nManager.createNotificationChannel(true, CHANNEL_ID_TIMER, CHANNEL_NAME_TIMER, context)
+            nManager.createNotificationChannel(true, CHANNEL_ID_TIMER+"exp", CHANNEL_NAME_TIMER, context)
             nManager.notify(id, nBuilder.build())
         }
 
@@ -86,7 +85,7 @@ class NotificationUtils {
             val df = SimpleDateFormat.getTimeInstance(SimpleDateFormat.SHORT)
 
 
-            val nBuilder = getNotificationBuilder(context, CHANNEL_ID_TIMER, true)
+            val nBuilder = getNotificationBuilder(context, CHANNEL_ID_TIMER, false)
             nBuilder.setContentTitle(context.resources.getStringArray(R.array.names)[id])
                 .setContentText("End: ${df.format(Date(wakeuptime))}")
                 .setContentIntent(getPendingIntentWithStack(context, MainActivity::class.java))
@@ -96,18 +95,20 @@ class NotificationUtils {
                 .addAction(R.drawable.ic_pause, "Pause", pausePendingIntent)
                 .addAction(R.drawable.ic_stop, "Stop", stopPendingIntent)
             val nManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            nManager.createNotificationChannel(true, CHANNEL_ID_TIMER, CHANNEL_NAME_TIMER, context)
+            nManager.createNotificationChannel(false, CHANNEL_ID_TIMER, CHANNEL_NAME_TIMER, context)
             nManager.notify(id, nBuilder.build())
             Log.d("DEBUG", "show $id notif")
         }
 
+
         private fun getNotificationBuilder(context: Context, channelId: String, playSound: Boolean): NotificationCompat.Builder {
-            val notificationSound: Uri = Uri.parse(ContentResolver. SCHEME_ANDROID_RESOURCE + "://" + context.packageName + "/" + R.raw.tap_sms ) ;
             //val notificationSound: Uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
             val nBuilder = NotificationCompat.Builder(context, channelId)
                 .setAutoCancel(true)
                 .setDefaults(0)
             if (playSound){
+                val notificationSound: Uri =
+                    Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + context.packageName + "/" + R.raw.finish)
                 nBuilder.setSound(notificationSound)
             }
             return nBuilder
@@ -130,12 +131,17 @@ class NotificationUtils {
                 else NotificationManager.IMPORTANCE_DEFAULT
                 val nChannel = NotificationChannel(channelId, channelName, channelImportance)
                 nChannel.enableVibration(true)
-                val notificationSound: Uri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + context.packageName + "/" + R.raw.tap_sms )
+                val notificationSound: Uri =
+                if (playSound) {
+
+                        Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + context.packageName + "/" + R.raw.finish)
+                } else RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
                 val audioAttributes = AudioAttributes.Builder()
                     .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
                     .setUsage(AudioAttributes.USAGE_NOTIFICATION)
                     .build()
                 nChannel.setSound(notificationSound, audioAttributes)
+
                 this.createNotificationChannel(nChannel)
             }
 
