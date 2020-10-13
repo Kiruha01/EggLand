@@ -31,7 +31,7 @@ class TimerTile(val id: Int, val name: String, val lengthInSeconds: Long, val id
     }
     var state = TimerState.Stopped
     private var secondsRemaining: Long = lengthInSeconds
-    private lateinit var timer: CountDownTimer
+    private var timer: CountDownTimer? = null
 
     fun finish(){
         //val notificationSound: Uri = Uri.parse(ContentResolver. SCHEME_ANDROID_RESOURCE + "://" + context.packageName + "/" + R.raw.tap_sms )
@@ -59,7 +59,12 @@ class TimerTile(val id: Int, val name: String, val lengthInSeconds: Long, val id
     }
 
     fun stopTimer(){
-        timer.cancel()
+        timer?.cancel()
+    }
+
+    fun pausedTimer(){
+        timer?.cancel()
+        state = TimerState.Paused
     }
 
     fun getRemainingSeconds(): Long{
@@ -69,6 +74,12 @@ class TimerTile(val id: Int, val name: String, val lengthInSeconds: Long, val id
     fun saveData(){
         PrefUtils.setSecondsRemaining(id, secondsRemaining, context)
         PrefUtils.setTimerState(id, state, context)
+    }
+
+    fun reset(){
+        state = TimerState.Stopped
+        PrefUtils.setTimerState(id, state, context)
+        secondsRemaining = PrefUtils.getTimerLength(id, context)
     }
 
     fun loadData(){

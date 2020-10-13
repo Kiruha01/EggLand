@@ -13,14 +13,9 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.timer_item.view.*
 import java.util.*
 
-/*
-TODO: что показывать по завершению будильника?
- */
-
 class MainActivity : AppCompatActivity() {
     companion object{
         lateinit var context: Context
-        const val countOfTimers = 3
         lateinit var listOfTimers: Array<TimerTile>
         fun createLists(){
             val tArray = context.resources.obtainTypedArray(R.array.images)
@@ -42,8 +37,19 @@ class MainActivity : AppCompatActivity() {
         girdView.setOnItemClickListener { adapterView, view, pos, id ->
             if (listOfTimers[pos].state != TimerTile.TimerState.Running) {
                 listOfTimers[pos].startTimer()
-                Toast.makeText(this, view.nameCard.text.toString(), Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, view.nameCard.text.toString() + " буль-буль", Toast.LENGTH_SHORT).show()
             }
+            else if (listOfTimers[pos].state == TimerTile.TimerState.Running) {
+                listOfTimers[pos].pausedTimer()
+                Toast.makeText(this, view.nameCard.text.toString() + " ждёт", Toast.LENGTH_SHORT).show()
+            }
+        }
+        girdView.setOnItemLongClickListener { adapterView, view, i, l ->
+            listOfTimers[i].stopTimer()
+            listOfTimers[i].reset()
+            girdAdapter.notifyDataSetChanged()
+            Toast.makeText(this, "Перехотел " + view.nameCard.text.toString(), Toast.LENGTH_SHORT).show()
+            true
         }
 
         //Log.i("DEBUG", Build.VERSION_CODES.O_MR1.toString())
