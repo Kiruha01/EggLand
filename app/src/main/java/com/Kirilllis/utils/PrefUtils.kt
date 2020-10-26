@@ -13,20 +13,20 @@ import com.Kirilllis.TimerTile
 * */
 class PrefUtils {
     companion object{
-        fun getTimerLength(id: Int, context: Context): Long{
-            return MainActivity.context.resources.getIntArray(R.array.time)[id].toLong()
-        }
+//        fun getTimerLength(id: Int, context: Context): Long{
+//            return MainActivity.context.resources.getIntArray(R.array.time)[id].toLong()
+//        }
 
         private const val PREVIOUS_TIMER_LENGTH_SECONDS_ID = "com.Kirilllis.EggLand.previous_timer_length"
 
-        fun getPreviousTimerLength(id : Int, context: Context): Long{
+        fun getTimerLength(id : Int, context: Context): Long{
             val preferences = PreferenceManager.getDefaultSharedPreferences(context)
-            return preferences.getLong(PREVIOUS_TIMER_LENGTH_SECONDS_ID + id.toString(), 0L)
+            return preferences.getLong(PREVIOUS_TIMER_LENGTH_SECONDS_ID + id.toString(), MainActivity.context.resources.getIntArray(R.array.time)[id].toLong())
         }
 
-        fun setPreviousTimerLength(id : Int, seconds: Long, context: Context) {
+        fun setTimerLength(id : Int, seconds: Long, context: Context) {
             val editor = PreferenceManager.getDefaultSharedPreferences(context).edit()
-            editor.putLong(PREVIOUS_TIMER_LENGTH_SECONDS_ID + id.toString(), seconds)
+            editor.putLong(PREVIOUS_TIMER_LENGTH_SECONDS_ID + id.toString(), seconds*60)
             editor.apply()
         }
 

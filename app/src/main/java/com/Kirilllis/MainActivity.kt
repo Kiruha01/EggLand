@@ -1,17 +1,19 @@
 package com.Kirilllis
 
 import android.content.Context
-import android.content.res.TypedArray
-import android.os.Build
 import android.os.Bundle
+import android.text.InputType
 import android.util.Log
+import android.widget.EditText
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.Kirilllis.utils.AlarmUtils
 import com.Kirilllis.utils.NotificationUtils
+import com.Kirilllis.utils.PrefUtils
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.timer_item.view.*
 import java.util.*
+
 
 class MainActivity : AppCompatActivity() {
     companion object{
@@ -20,9 +22,10 @@ class MainActivity : AppCompatActivity() {
         fun createLists(){
             val tArray = context.resources.obtainTypedArray(R.array.images)
             listOfTimers = Array<TimerTile>(context.resources.getStringArray(R.array.names).size){
-                TimerTile(it, context.resources.getStringArray(R.array.names)[it], context.resources.getIntArray(R.array.time)[it].toLong(),  tArray.getResourceId(it, R.drawable.ooops), context)
+                TimerTile(it, context.resources.getStringArray(R.array.names)[it], PrefUtils.getTimerLength(it, context),  tArray.getResourceId(it, R.drawable.grechka), context)
             }
             tArray.recycle()
+
         }
     }
 
@@ -32,27 +35,56 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         Companion.context = this
         Companion.createLists()
+        for (i in listOfTimers.indices){
+            Log.d("DEBUG", listOfTimers[i].name)
+        }
         val girdAdapter = TimersAdapter(listOfTimers, this)
         girdView.adapter = girdAdapter
         girdView.setOnItemClickListener { adapterView, view, pos, id ->
             if (listOfTimers[pos].state != TimerTile.TimerState.Running) {
                 listOfTimers[pos].startTimer()
-                Toast.makeText(this, view.nameCard.text.toString() + " буль-буль", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, view.nameCard.text.toString() + " буль-буль" + pos.toString(), Toast.LENGTH_SHORT).show()
             }
             else if (listOfTimers[pos].state == TimerTile.TimerState.Running) {
                 listOfTimers[pos].pausedTimer()
-                Toast.makeText(this, view.nameCard.text.toString() + " ждёт", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Слышен храп - " + view.nameCard.text.toString(), Toast.LENGTH_SHORT).show()
             }
         }
         girdView.setOnItemLongClickListener { adapterView, view, i, l ->
-            listOfTimers[i].stopTimer()
-            listOfTimers[i].reset()
-            girdAdapter.notifyDataSetChanged()
-            Toast.makeText(this, "Перехотел " + view.nameCard.text.toString(), Toast.LENGTH_SHORT).show()
+            if (listOfTimers[i].state == TimerTile.TimerState.Running) {
+                listOfTimers[i].stopTimer()
+                listOfTimers[i].reset()
+                girdAdapter.notifyDataSetChanged()
+                Toast.makeText(
+                    this,
+                    "Ты перехотел " + view.nameCard.text.toString() + "?",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+            else if (listOfTimers[i].state == TimerTile.TimerState.Stopped)
+            {
+                val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+                builder.setTitle("Введите время для " + listOfTimers[i].name + " в минутах")
+
+                val input = EditText(this)
+                input.inputType =
+                    InputType.TYPE_CLASS_NUMBER
+                builder.setView(input)
+                builder.setPositiveButton("OK") { dialog, which ->
+                    PrefUtils.setTimerLength(i, input.text.toString().toLong(), context)
+                    listOfTimers[i].loadData()
+                    girdAdapter.notifyDataSetChanged()
+                    //m_Text = input.text.toString()
+                }
+                builder.setNegativeButton("Cancel") { dialog, which ->
+                    dialog.cancel()
+                }
+                builder.show();
+            }
+
             true
         }
 
-        //Log.i("DEBUG", Build.VERSION_CODES.O_MR1.toString())
 
         MainTimer.scheduleAtFixedRate(
             object : TimerTask() {
@@ -102,6 +134,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
         Log.d("DEBUG", "onResume, all loaded")
-        NotificationUtils.hideNotifications(2, context)
+        NotificationUtils.hideNotifications(-1, context)
     }
 }

@@ -25,7 +25,7 @@ import kotlinx.android.synthetic.main.timer_item.view.*
 *
 * */
 
-class TimerTile(val id: Int, val name: String, val lengthInSeconds: Long, val idPicture: Int, val context: Context) {
+class TimerTile(val id: Int, val name: String, var lengthInSeconds: Long, val idPicture: Int, val context: Context) {
     enum class TimerState{
         Stopped, Paused, Running
     }
@@ -35,11 +35,16 @@ class TimerTile(val id: Int, val name: String, val lengthInSeconds: Long, val id
 
     fun finish(){
         //val notificationSound: Uri = Uri.parse(ContentResolver. SCHEME_ANDROID_RESOURCE + "://" + context.packageName + "/" + R.raw.tap_sms )
-        val ringtoneUri = Uri.parse(ContentResolver. SCHEME_ANDROID_RESOURCE + "://" + context.packageName + "/" + R.raw.tap_sms )
+        val ringtoneUri = Uri.parse(ContentResolver. SCHEME_ANDROID_RESOURCE + "://" + context.packageName + "/" + R.raw.finish )
         val ringtoneSound = RingtoneManager.getRingtone(context, ringtoneUri)
         val int = Intent(context, TimeIsUp::class.java)
         context.startActivity(int)
         ringtoneSound.play();
+    }
+
+    fun getImageId(): Int{
+        Log.d("DEBUG", idPicture.toString())
+        return idPicture
     }
 
     fun startTimer(){
@@ -83,7 +88,7 @@ class TimerTile(val id: Int, val name: String, val lengthInSeconds: Long, val id
     }
 
     fun loadData(){
-        //PrefUtils.setTimerState(id, TimerState.Stopped, context)
+        lengthInSeconds = PrefUtils.getTimerLength(id, context)
         state = PrefUtils.getTimerState(id, context)
         secondsRemaining = if (state == TimerState.Running || state == TimerState.Paused) PrefUtils.getSecondsRemaining(id, context)
         else lengthInSeconds

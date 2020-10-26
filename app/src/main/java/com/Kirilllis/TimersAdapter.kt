@@ -17,9 +17,9 @@ class TimersAdapter(var timers: Array<TimerTile>, val context: Context): BaseAda
         var view = convertView
         if (convertView == null){
             view = lInflater?.inflate(R.layout.timer_item, viewGroup, false)
-            view?.findViewById<TextView>(R.id.nameCard)?.setText(timers[position].name)
+            view?.findViewById<TextView>(R.id.nameCard)?.setText(position.toString())
             view?.findViewById<TextView>(R.id.timeCard)?.setText("${if (timers[position].getRemainingSeconds()/60 < 10) "0" else ""}${timers[position].getRemainingSeconds()/60}:${if (timers[position].getRemainingSeconds() % 60 < 10) "0" else ""}${timers[position].getRemainingSeconds()%60}")
-            view?.findViewById<ImageView>(R.id.icon)?.setImageResource(timers[position].idPicture)
+            view?.findViewById<ImageView>(R.id.icon)?.setImageResource(timers[position].getImageId())
         }
         else{
             view?.findViewById<TextView>(R.id.timeCard)?.setText("${if (timers[position].getRemainingSeconds() / 60 < 10) "0" else ""}${timers[position].getRemainingSeconds() / 60}:${if (timers[position].getRemainingSeconds() % 60 < 10) "0" else ""}${timers[position].getRemainingSeconds() % 60}")

@@ -1,18 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="names">
-        <item>Пельмень</item>
-        <item>ФОльга</item>
-        <item>Айайай</item>
+        <item>Яйцо</item>
+        <item>Яйца всмятку</item>
+        <item>Яичница</item>
+        <item>Пельмени</item>
+        <item>Макароны</item>
+        <item>Гречка</item>
+        <item>Доширак</item>
+        <item>Рис</item>
     </string-array>
     <integer-array name="time">
-        <item>10</item>
-        <item>20</item>
-        <item>90</item>
+        <item>1020</item>
+        <item>780</item>
+        <item>600</item>
+        <item>600</item>
+        <item>600</item>
+        <item>900</item>
+        <item>240</item>
+        <item>1010</item>
     </integer-array>
     <array name="images">
-        <item>@drawable/ooops</item>
-        <item>@drawable/teams</item>
-        <item>@drawable/hitman</item>
+        <item>@drawable/eggs</item>
+        <item>@drawable/smyat</item>
+        <item>@drawable/yaich</item>
+        <item>@drawable/pelmens</item>
+        <item>@drawable/makarons</item>
+        <item>@drawable/grechka</item>
+        <item>@drawable/doshirak</item>
+        <item>@drawable/ris</item>
     </array>
 </resources>

@@ -3,15 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@android:color/holo_orange_dark"
+    android:layout_height="250dp"
+    android:background="@color/itemback"
     android:padding="15dp"
     android:paddingTop="20dp">
 
     <ImageView
         android:id="@+id/icon"
-        android:layout_width="126dp"
-        android:layout_height="124dp"
+        android:layout_width="0dp"
+        android:layout_height="145dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -25,7 +25,7 @@
         android:layout_height="wrap_content"
         android:paddingTop="5dp"
         android:text="10:15"
-        android:textColor="@android:color/background_light"
+        android:textColor="@color/textDark"
         android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

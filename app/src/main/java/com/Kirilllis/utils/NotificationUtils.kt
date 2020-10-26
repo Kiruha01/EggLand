@@ -43,10 +43,10 @@ class NotificationUtils {
             val startPendingIntent = PendingIntent.getBroadcast(context, id, startIntent, PendingIntent.FLAG_UPDATE_CURRENT)
             val nBuilder = getNotificationBuilder(context, CHANNEL_ID_TIMER+"exp", true)
             nBuilder.setContentTitle(context.resources.getStringArray(R.array.names)[id])
-                .setContentText("Start Again?")
+                .setContentText("Сварим ещё?")
                 .setSmallIcon(R.drawable.ic_timer_finish)
                 .setContentIntent(getPendingIntentWithStack(context, MainActivity::class.java))
-                .addAction(R.drawable.ic_play_arrow, "Start", startPendingIntent)
+                .addAction(R.drawable.ic_play_arrow, "Варить", startPendingIntent)
             val nManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             nManager.createNotificationChannel(true, CHANNEL_ID_TIMER+"exp", CHANNEL_NAME_TIMER, context)
             nManager.notify(id, nBuilder.build())
@@ -60,11 +60,11 @@ class NotificationUtils {
             val startPendingIntent = PendingIntent.getBroadcast(context, id, startIntent, PendingIntent.FLAG_UPDATE_CURRENT)
             val nBuilder = getNotificationBuilder(context, CHANNEL_ID_TIMER, false)
             nBuilder.setContentTitle(context.resources.getStringArray(R.array.names)[id])
-                .setContentText("Resume?")
+                .setContentText("Продолжим?")
                 .setSmallIcon(R.drawable.ic_timer)
                 .setOngoing(true)
                 .setContentIntent(getPendingIntentWithStack(context, MainActivity::class.java))
-                .addAction(R.drawable.ic_play_arrow, "Resume", startPendingIntent)
+                .addAction(R.drawable.ic_play_arrow, "Да", startPendingIntent)
             val nManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             nManager.createNotificationChannel(false, CHANNEL_ID_TIMER, CHANNEL_NAME_TIMER, context)
             nManager.notify(id, nBuilder.build())
@@ -80,20 +80,23 @@ class NotificationUtils {
             val stopIntent = Intent(context, NotifyReceiver::class.java)
             stopIntent.action = ACTION_STOP
             stopIntent.putExtra("id", id)
-            val stopPendingIntent = PendingIntent.getBroadcast(context, 0, stopIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+            val stopPendingIntent = PendingIntent.getBroadcast(context, id, stopIntent, PendingIntent.FLAG_UPDATE_CURRENT)
 
             val df = SimpleDateFormat.getTimeInstance(SimpleDateFormat.SHORT)
 
 
             val nBuilder = getNotificationBuilder(context, CHANNEL_ID_TIMER, false)
             nBuilder.setContentTitle(context.resources.getStringArray(R.array.names)[id])
-                .setContentText("End: ${df.format(Date(wakeuptime))}")
+                .setContentText("Будет готово в ${df.format(Date(wakeuptime))}")
                 .setContentIntent(getPendingIntentWithStack(context, MainActivity::class.java))
                 .setOngoing(true)
-                .setVibrate(longArrayOf(100L,500L,100L))
+                .setVibrate(LongArray(4){
+                    100L*it
+                })
                 .setSmallIcon(R.drawable.ic_timer)
-                .addAction(R.drawable.ic_pause, "Pause", pausePendingIntent)
-                .addAction(R.drawable.ic_stop, "Stop", stopPendingIntent)
+                .addAction(R.drawable.ic_pause, "Пауза", pausePendingIntent)
+                .addAction(R.drawable.ic_stop, "Стоп", stopPendingIntent)
+                //.setSound(null)
             val nManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             nManager.createNotificationChannel(false, CHANNEL_ID_TIMER, CHANNEL_NAME_TIMER, context)
             nManager.notify(id, nBuilder.build())
@@ -110,6 +113,9 @@ class NotificationUtils {
                 val notificationSound: Uri =
                     Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + context.packageName + "/" + R.raw.finish)
                 nBuilder.setSound(notificationSound)
+            }
+            else{
+                nBuilder.setSound(null)
             }
             return nBuilder
         }
@@ -131,25 +137,32 @@ class NotificationUtils {
                 else NotificationManager.IMPORTANCE_DEFAULT
                 val nChannel = NotificationChannel(channelId, channelName, channelImportance)
                 nChannel.enableVibration(true)
-                val notificationSound: Uri =
-                if (playSound) {
 
-                        Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + context.packageName + "/" + R.raw.finish)
-                } else RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
-                val audioAttributes = AudioAttributes.Builder()
+                if (playSound) {
+                    val notificationSound: Uri =
+                    Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + context.packageName + "/" + R.raw.finish)
+                    val audioAttributes = AudioAttributes.Builder()
                     .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
                     .setUsage(AudioAttributes.USAGE_NOTIFICATION)
                     .build()
-                nChannel.setSound(notificationSound, audioAttributes)
-
+                    nChannel.setSound(notificationSound, audioAttributes)
+                } else {
+                    //RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+                    nChannel.setSound(null, null)
+                }
                 this.createNotificationChannel(nChannel)
             }
 
         }
         fun hideNotifications(id: Int, context: Context){
             val nManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            for (i in 0..id)
-                nManager.cancel(i)
+            if (id < 0){
+                for (i in 0..MainActivity.context.resources.getStringArray(R.array.names).size){
+                    nManager.cancel(i)
+                }
+            }
+            else
+                nManager.cancel(id)
         }
 
         private fun findNearestTimerWithState(timers: Array<TimerTile>, state: TimerTile.TimerState): Int{
@@ -166,7 +179,6 @@ class NotificationUtils {
         }
 
         fun showNearestNotification(timers: Array<TimerTile>, context: Context){
-            Log.d("DEBUG", "start method of notif")
             for(i in timers.indices){
                 when(timers[i].state){
                     TimerTile.TimerState.Running -> showTimerRunning(timers[i].id, context,
