@@ -88,7 +88,6 @@ class TimerTile(val id: Int, val name: String, var lengthInSeconds: Long, val id
     }
 
     fun loadData(){
-        Log.d("DEBUG", "Loaded for " + id.toString())
         lengthInSeconds = PrefUtils.getTimerLength(id, context)
         state = PrefUtils.getTimerState(id, context)
         secondsRemaining = if (state == TimerState.Running || state == TimerState.Paused) PrefUtils.getSecondsRemaining(id, context)

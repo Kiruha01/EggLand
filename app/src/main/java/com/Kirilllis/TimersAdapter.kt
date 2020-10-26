@@ -35,16 +35,14 @@ class TimersAdapter(var timers: Array<TimerTile>, val context: Context): BaseAda
 //            view?.findViewById<TextView>(R.id.timeCard)?.setText("${if (timers[position].getRemainingSeconds()/60 < 10) "0" else ""}${timers[position].getRemainingSeconds()/60}:${if (timers[position].getRemainingSeconds() % 60 < 10) "0" else ""}${timers[position].getRemainingSeconds()%60}")
 //            view?.findViewById<ImageView>(R.id.icon)?.setImageResource(timers[position].getImageId())
         }
-        else{
+        else {
             view = convertView
             viewHolder = view.tag as ViewHolder
-//            view?.findViewById<TextView>(R.id.timeCard)?.setText("${if (timers[position].getRemainingSeconds() / 60 < 10) "0" else ""}${timers[position].getRemainingSeconds() / 60}:${if (timers[position].getRemainingSeconds() % 60 < 10) "0" else ""}${timers[position].getRemainingSeconds() % 60}")
+
         }
-        Log.d("DEBUG", "Callig with " + position.toString())
-        viewHolder.timeTextView.setText(timers[position].getRemainingSeconds().toString())
-        viewHolder.nameTextView.setText(position.toString())
         viewHolder.pictureImageView.setImageResource(timers[position].getImageId())
-        //viewHolder.timeTextView.setText("${if (timers[position].getRemainingSeconds() / 60 < 10) "0" else ""}${timers[position].getRemainingSeconds() / 60}:${if (timers[position].getRemainingSeconds() % 60 < 10) "0" else ""}${timers[position].getRemainingSeconds() % 60}")
+        viewHolder.nameTextView.setText(timers[position].name)
+        viewHolder.timeTextView.setText("${if (timers[position].getRemainingSeconds() / 60 < 10) "0" else ""}${timers[position].getRemainingSeconds() / 60}:${if (timers[position].getRemainingSeconds() % 60 < 10) "0" else ""}${timers[position].getRemainingSeconds() % 60}")
         return view
     }
 
