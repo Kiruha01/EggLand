@@ -34,11 +34,12 @@ class TimeIsUp : AppCompatActivity() {
             )
         }
 
-        val id = intent.getIntExtra("id", 0)
+        val id = intent.getIntExtra("id", 1)
         val tArray = MainActivity.context.resources.obtainTypedArray(R.array.images)
         IM_food.setImageResource(tArray.getResourceId(id, R.drawable.eggs))
 
         Log.d("DEBUG", "onCreate() - -- +")
+        tArray.recycle()
     }
 
     override fun onStart() {

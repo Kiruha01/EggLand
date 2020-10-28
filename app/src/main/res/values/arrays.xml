@@ -11,9 +11,9 @@
         <item>Рис</item>
     </string-array>
     <integer-array name="time">
-        <item>1020</item>
+        <item>420</item>
         <item>780</item>
-        <item>600</item>
+        <item>240</item>
         <item>600</item>
         <item>600</item>
         <item>900</item>

@@ -15,12 +15,13 @@ class TimerAlarmReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
         Log.d("DEBUG", "received")
+        val id = intent.getIntExtra("id", 0)
         // This method is called when the BroadcastReceiver is receiving an Intent broadcast.
-        NotificationUtils.showTimerExpired(intent.getIntExtra("id", 0), context)
-        PrefUtils.setTimerState(intent.getIntExtra("id", 0), TimerTile.TimerState.Stopped, context)
-        AlarmUtils.removeAlarm(intent.getIntExtra("id", 0) , context)
+        NotificationUtils.showTimerExpired(id, context)
+        PrefUtils.setTimerState(id, TimerTile.TimerState.Stopped, context)
+        AlarmUtils.removeAlarm(id , context)
         val int = Intent(context, TimeIsUp::class.java)
-            .putExtra("id", intent.getIntExtra("id", 0))
+            .putExtra("id", id)
         int.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         context.startActivity(int)
     }

@@ -24,7 +24,7 @@ class MainActivity : AppCompatActivity() {
             listOfTimers = Array<TimerTile>(context.resources.getStringArray(R.array.names).size){
                 TimerTile(it, context.resources.getStringArray(R.array.names)[it], PrefUtils.getTimerLength(it, context),  tArray.getResourceId(it, R.drawable.grechka), context)
             }
-            tArray.recycle()
+                tArray.recycle()
 
         }
     }
@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity() {
         girdView.setOnItemClickListener { adapterView, view, pos, id ->
             if (listOfTimers[pos].state != TimerTile.TimerState.Running) {
                 listOfTimers[pos].startTimer()
-                Toast.makeText(this, view.nameCard.text.toString() + " буль-буль" + pos.toString(), Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, view.nameCard.text.toString() + " буль-буль", Toast.LENGTH_SHORT).show()
             }
             else if (listOfTimers[pos].state == TimerTile.TimerState.Running) {
                 listOfTimers[pos].pausedTimer()
@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
         girdView.setOnItemLongClickListener { adapterView, view, i, l ->
-            if (listOfTimers[i].state == TimerTile.TimerState.Running) {
+            if (listOfTimers[i].state == TimerTile.TimerState.Running || listOfTimers[i].state == TimerTile.TimerState.Paused) {
                 listOfTimers[i].stopTimer()
                 listOfTimers[i].reset()
                 girdAdapter.notifyDataSetChanged()
@@ -71,10 +71,12 @@ class MainActivity : AppCompatActivity() {
                     InputType.TYPE_CLASS_NUMBER
                 builder.setView(input)
                 builder.setPositiveButton("OK") { dialog, which ->
-                    PrefUtils.setTimerLength(i, input.text.toString().toLong(), context)
-                    listOfTimers[i].loadData()
-                    girdAdapter.notifyDataSetChanged()
-                    //m_Text = input.text.toString()
+                    if (input.text.toString() != "") {
+                        PrefUtils.setTimerLength(i, input.text.toString().toLong(), context)
+                        listOfTimers[i].loadData()
+                        girdAdapter.notifyDataSetChanged()
+                        //m_Text = input.text.toString()
+                    }
                 }
                 builder.setNegativeButton("Cancel") { dialog, which ->
                     dialog.cancel()

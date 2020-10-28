@@ -38,6 +38,7 @@ class TimerTile(val id: Int, val name: String, var lengthInSeconds: Long, val id
         val ringtoneUri = Uri.parse(ContentResolver. SCHEME_ANDROID_RESOURCE + "://" + context.packageName + "/" + R.raw.finish )
         val ringtoneSound = RingtoneManager.getRingtone(context, ringtoneUri)
         val int = Intent(context, TimeIsUp::class.java)
+        int.putExtra("id", id)
         context.startActivity(int)
         ringtoneSound.play();
     }
