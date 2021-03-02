@@ -2,7 +2,7 @@
 ![](https://i.imgur.com/clC0y9L.png) 
 > Никогда не забудешь, зачем поставил воду!
 
-[Скачать apk](https://github.com/Kiruha01/EggLand/releases/latest)
+[![](https://img.shields.io/github/downloads/Kiruha01/EggLand/latest/EggLang.apk)](https://github.com/Kiruha01/EggLand/releases/latest/download/EggLang.apk)
 ## Использование
 На главном экране распологаются плиточки с названиями и картинками продуктов
 
